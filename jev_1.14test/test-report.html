@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Jev 1.14 sweep-into test report</title>
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; color: #18181b; background: #fff; }
+  main { max-width: 760px; margin: 0 auto; padding: 28px 16px 56px; }
+  h1 { font-size: 22px; margin: 0 0 8px; }
+  h2 { font-size: 16px; margin: 28px 0 6px; }
+  p { margin: 0 0 10px; color: #3f3f46; line-height: 1.45; }
+  svg { width: 100%; height: auto; }
+  table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e4e4e7; font-size: 14px; }
+  th { color: #52525b; font-weight: 500; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Jev 1.14 sweep-into tests</h1>
+  <p>Three calls on saved sweep-into clips. Each clip sent 8 frames. A match means the result was the side with the higher ground-truth return. Tie counted as a miss whenever the returns differed.</p>
+  <h2>Match rate</h2>
+  <p>The first 10 pairs are the earliest checkpoints. The other two runs use the same 35 pairs, taken about every 40 feedback labels.</p>
+  <svg viewBox="0 0 720 170" role="img" aria-label="Match rate of the three tests"><g transform="translate(0 0)"><text x="0" y="18" font-size="14" fill="#18181b">First 10 pairs</text><rect x="210" y="2" width="108.0" height="22" rx="4" fill="#71717a"/><text x="326.0" y="18" font-size="14" fill="#18181b">3/10 · 30%</text></g><g transform="translate(0 52)"><text x="0" y="18" font-size="14" fill="#18181b">Stride 40</text><rect x="210" y="2" width="133.7" height="22" rx="4" fill="#c2410c"/><text x="351.7" y="18" font-size="14" fill="#18181b">13/35 · 37%</text></g><g transform="translate(0 104)"><text x="0" y="18" font-size="14" fill="#18181b">Stride 40, tie threshold</text><rect x="210" y="2" width="205.7" height="22" rx="4" fill="#1f7a4d"/><text x="423.7" y="18" font-size="14" fill="#18181b">20/35 · 57%</text></g></svg>
+  <h2>What the model answered</h2>
+  <p>Most misses in the unthresholded stride-40 run are ties. Keeping a tie only when its probability is above 60% turns some of those into A or B and raises the match count from 13 to 20. Wrong-side answers rise from 2 to 5.</p>
+  <svg viewBox="0 0 640 210" role="img" aria-label="Matched, tie, and wrong-side counts"><g transform="translate(0 0)"><g transform="translate(0 0)"><rect width="12" height="12" rx="2" fill="#1f7a4d"/><text x="18" y="11" font-size="13" fill="#18181b">Matched</text></g><g transform="translate(120 0)"><rect width="12" height="12" rx="2" fill="#c2410c"/><text x="18" y="11" font-size="13" fill="#18181b">Tie</text></g><g transform="translate(240 0)"><rect width="12" height="12" rx="2" fill="#b42318"/><text x="18" y="11" font-size="13" fill="#18181b">Other side</text></g></g><g transform="translate(0 16)"><rect x="80" y="139.0" width="28" height="21.0" rx="3" fill="#1f7a4d"><title>First 10 Matched 3</title></rect><text x="94" y="135.0" text-anchor="middle" font-size="12" fill="#18181b">3</text><rect x="116" y="132.0" width="28" height="28.0" rx="3" fill="#c2410c"><title>First 10 Tie 4</title></rect><text x="130" y="128.0" text-anchor="middle" font-size="12" fill="#18181b">4</text><rect x="152" y="139.0" width="28" height="21.0" rx="3" fill="#b42318"><title>First 10 Other side 3</title></rect><text x="166" y="135.0" text-anchor="middle" font-size="12" fill="#18181b">3</text><text x="126" y="184" text-anchor="middle" font-size="13" fill="#18181b">First 10</text><rect x="260" y="69.0" width="28" height="91.0" rx="3" fill="#1f7a4d"><title>Stride 40 Matched 13</title></rect><text x="274" y="65.0" text-anchor="middle" font-size="12" fill="#18181b">13</text><rect x="296" y="20.0" width="28" height="140.0" rx="3" fill="#c2410c"><title>Stride 40 Tie 20</title></rect><text x="310" y="16.0" text-anchor="middle" font-size="12" fill="#18181b">20</text><rect x="332" y="146.0" width="28" height="14.0" rx="3" fill="#b42318"><title>Stride 40 Other side 2</title></rect><text x="346" y="142.0" text-anchor="middle" font-size="12" fill="#18181b">2</text><text x="306" y="184" text-anchor="middle" font-size="13" fill="#18181b">Stride 40</text><rect x="440" y="20.0" width="28" height="140.0" rx="3" fill="#1f7a4d"><title>Threshold Matched 20</title></rect><text x="454" y="16.0" text-anchor="middle" font-size="12" fill="#18181b">20</text><rect x="476" y="90.0" width="28" height="70.0" rx="3" fill="#c2410c"><title>Threshold Tie 10</title></rect><text x="490" y="86.0" text-anchor="middle" font-size="12" fill="#18181b">10</text><rect x="512" y="125.0" width="28" height="35.0" rx="3" fill="#b42318"><title>Threshold Other side 5</title></rect><text x="526" y="121.0" text-anchor="middle" font-size="12" fill="#18181b">5</text><text x="486" y="184" text-anchor="middle" font-size="13" fill="#18181b">Threshold</text></g></svg>
+  <h2>Match rate by return gap</h2>
+  <p>Larger gaps are easier. On the thresholded run, 8 of the 10 pairs with a return gap of at least 3 were matched.</p>
+  <svg viewBox="0 0 700 200" role="img" aria-label="Match rate by minimum return gap"><g transform="translate(180 0)"><rect width="12" height="12" fill="#c2410c"/><text x="18" y="11" font-size="13">Stride 40</text></g><g transform="translate(300 0)"><rect width="12" height="12" fill="#1f7a4d"/><text x="18" y="11" font-size="13">Tie threshold</text></g><g transform="translate(0 24)"><text x="0" y="36" font-size="14" fill="#18181b">Gap at least 0</text><rect x="180" y="20" width="59.4" height="20" rx="4" fill="#c2410c"/><text x="247.4" y="35" font-size="13" fill="#18181b">13/35</text><rect x="400" y="20" width="91.4" height="20" rx="4" fill="#1f7a4d"/><text x="499.4" y="35" font-size="13" fill="#18181b">20/35</text><text x="0" y="80" font-size="14" fill="#18181b">Gap at least 1</text><rect x="180" y="64" width="94.1" height="20" rx="4" fill="#c2410c"/><text x="282.1" y="79" font-size="13" fill="#18181b">10/17</text><rect x="400" y="64" width="122.4" height="20" rx="4" fill="#1f7a4d"/><text x="530.4" y="79" font-size="13" fill="#18181b">13/17</text><text x="0" y="124" font-size="14" fill="#18181b">Gap at least 2</text><rect x="180" y="108" width="86.2" height="20" rx="4" fill="#c2410c"/><text x="274.2" y="123" font-size="13" fill="#18181b">7/13</text><rect x="400" y="108" width="123.1" height="20" rx="4" fill="#1f7a4d"/><text x="531.1" y="123" font-size="13" fill="#18181b">10/13</text><text x="0" y="168" font-size="14" fill="#18181b">Gap at least 3</text><rect x="180" y="152" width="80.0" height="20" rx="4" fill="#c2410c"/><text x="268.0" y="167" font-size="13" fill="#18181b">5/10</text><rect x="400" y="152" width="128.0" height="20" rx="4" fill="#1f7a4d"/><text x="536.0" y="167" font-size="13" fill="#18181b">8/10</text></g></svg>
+  <h2>Runs</h2>
+  <table>
+    <thead><tr><th>Run</th><th class="num">Pairs</th><th class="num">Matched</th><th class="num">Tie</th><th class="num">Other side</th><th class="num">Input tokens</th><th class="num">Cost</th></tr></thead>
+    <tbody>
+      <tr><td>First 10 pairs</td><td class="num">10</td><td class="num">3</td><td class="num">4</td><td class="num">3</td><td class="num">117,379</td><td class="num">$0.00493</td></tr>
+      <tr><td>Stride 40</td><td class="num">35</td><td class="num">13</td><td class="num">20</td><td class="num">2</td><td class="num">410,836</td><td class="num">$0.01726</td></tr>
+      <tr><td>Stride 40, tie threshold</td><td class="num">35</td><td class="num">20</td><td class="num">10</td><td class="num">5</td><td class="num">410,763</td><td class="num">$0.01725</td></tr>
+    </tbody>
+  </table>
+</main>
+</body>
+</html>

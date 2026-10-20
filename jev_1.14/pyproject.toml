@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jev-1-14"
+version = "0.1.0"
+description = "PEBBLE skill training judged by Jev 1.14 from video frames"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24,<3",
+  "torch>=2.1",
+  "gymnasium>=1.0",
+  "dm-control>=1.0.20",
+  "metaworld>=2.0.0",
+  "matplotlib>=3.8",
+  "ruptures>=1.1",
+]
+
+[project.scripts]
+jev-1-14 = "jev114.train:main"
+
+[tool.setuptools.packages.find]
+include = ["jev114*"]
